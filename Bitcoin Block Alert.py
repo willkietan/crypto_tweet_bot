@@ -88,12 +88,15 @@ def run_code():
 
     endpoint = api_root + "&min_value=" + str(min_value) + "&start=" + str(start) + "&end=" + str(end)
     response = requests.get(endpoint)
-    print(response.json())
+    
     try:
         for x in range(0, response.json()['count']):
-            tweet = generate_tweet(response.json()['transactions'][x])
-            print(tweet)
-            send_to_twitter(tweet)
+            if response.json()['count'] == 0:
+                "no transactions"
+            else:
+                tweet = generate_tweet(response.json()['transactions'][x])
+                print(tweet)
+                send_to_twitter(tweet)
     except KeyError as error:
         print("usage limit reached")
 
