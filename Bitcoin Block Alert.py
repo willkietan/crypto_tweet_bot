@@ -81,17 +81,21 @@ def run_code():
     current_time
 
     min_value = 500000
-    start = current_time - 120
+    start = current_time - 5
     end = current_time
 
     api_root = "https://api.whale-alert.io/v1/transactions?api_key=" + apikey
 
     endpoint = api_root + "&min_value=" + str(min_value) + "&start=" + str(start) + "&end=" + str(end)
     response = requests.get(endpoint)
-    for x in range(0, response.json()['count']):
-        tweet = generate_tweet(response.json()['transactions'][x])
-        print(tweet)
-        send_to_twitter(tweet)
+    print(response.json())
+    try:
+        for x in range(0, response.json()['count']):
+            tweet = generate_tweet(response.json()['transactions'][x])
+            print(tweet)
+            send_to_twitter(tweet)
+    except KeyError as error:
+        print("usage limit reached")
 
 import threading, time
 
