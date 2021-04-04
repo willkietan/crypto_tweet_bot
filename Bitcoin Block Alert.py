@@ -88,10 +88,12 @@ def run_code():
     endpoint = api_root + "&min_value=" + str(min_value) + "&start=" + str(start) + "&end=" + str(end)
     response = requests.get(endpoint)
     
-    if response.json()['count'] == 0:
-        print("no transactions")
+
     
     try:
+        if response.json()['count'] == 0:
+        print("no transactions")
+
         for x in range(0, response.json()['count']):
             if response.json()['count'] == 0:
                 "no transactions"
