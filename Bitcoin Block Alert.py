@@ -13,7 +13,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 apikey = "Ni1gzj8jQQPzeYbGZu7haEpFGSzFHQWs"
 api_root = "https://api.whale-alert.io/v1/status?api_key=" + apikey
 endpoint = api_root
-response = requests.get(endpoint, auth=("", apikey))
+response = requests.get(endpoint, auth=("27072ce01a43d2d10eeb9d5ead7e7ee6-us9", apikey))
 response = requests.get(endpoint)
 response
 
@@ -22,14 +22,13 @@ current_time = round(time.time())
 current_time
 
 min_value = 500000
-start = current_time - 300
+start = current_time - 60
 end = current_time
 
 api_root = "https://api.whale-alert.io/v1/transactions?api_key=" + apikey
 
 endpoint = api_root + "&min_value=" + str(min_value) + "&start=" + str(start) + "&end=" + str(end)
 response = requests.get(endpoint)
-
 
 def find_owners(response): #transaction is passed
     owner_from = ""
@@ -89,6 +88,9 @@ def run_code():
     endpoint = api_root + "&min_value=" + str(min_value) + "&start=" + str(start) + "&end=" + str(end)
     response = requests.get(endpoint)
     
+    if response.json()['count'] == 0:
+        print("no transactions")
+    
     try:
         for x in range(0, response.json()['count']):
             if response.json()['count'] == 0:
@@ -100,18 +102,16 @@ def run_code():
     except KeyError as error:
         print("usage limit reached")
 
+run_code()
+
 import threading, time
 
 def foo():
     print(time.ctime())
     
-WAIT_TIME_SECONDS = 60
+WAIT_TIME_SECONDS = 5
 
 ticker = threading.Event()
 while not ticker.wait(WAIT_TIME_SECONDS):
     foo()
     run_code()
-
-
-
-
